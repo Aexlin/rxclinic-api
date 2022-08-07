@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
 
             //* User Table: Created by / Updated By / Verified By
 
+            //* All Admin Associations
+
             // % ONLY Admin can add another admin
             this.belongsTo(models.User, {
                 foreignKey: 'created_by',
@@ -33,11 +35,33 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: 'RESTRICT',
             });
 
-            // % 1:M (hasMany) [users].[verified_by] -> [users].[user_id]
-            // % Admin/Doctors verifying Doctors
+            // % Admin verifying Doctors
             this.hasMany(models.User, {
                 foreignKey: 'verified_by',
-                as: 'verified_by_admins',
+                as: 'verified_by_admin',
+                onDelete: 'RESTRICT',
+            });
+
+            // % Admin changing consultation status
+            this.hasMany(models.Consultation, {
+                foreignKey: 'status_changed_by',
+                as: 'status_changed_by_admin',
+                onDelete: 'RESTRICT',
+            });
+
+            //* All Doctor Associations
+
+            // % Doctors changing consultation status
+            this.hasMany(models.Consultation, {
+                foreignKey: 'status_changed_by',
+                as: 'status_changed_by_doctor',
+                onDelete: 'RESTRICT',
+            });
+
+            //% Doctors verifying Doctors
+            this.hasMany(models.User, {
+                foreignKey: 'verified_by',
+                as: 'verified_by_doctor',
                 onDelete: 'RESTRICT',
             });
 
