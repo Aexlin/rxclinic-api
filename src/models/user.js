@@ -17,71 +17,292 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
 
-            //* User Table: Created by / Updated By / Verified By
+            //* >> User Table: Created by / Updated By / Verified By
 
-            //* All Admin Associations
-
-            // % ONLY Admin can add another admin
+            // % M:1 (belongsTo) [users].[user_id] -> [users].[created_by]
+            // % Admin adding other Admins
             this.belongsTo(models.User, {
-                foreignKey: 'created_by',
-                as: 'admin_created_by_admin',
-                onDelete: 'RESTRICT',
+                foreignKey: "created_by",
+                as: "created_by_admin",
+                onDelete: "RESTRICT",
             });
 
-            // % Admin can update own data
+            // % 1:M (hasMany) [users].[updated_by] -> [users].[user_id]
+            // % Admins updating other Admin
+            this.hasMany(models.User, {
+                foreignKey: "updated_by",
+                as: "updated_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [users].[user_id] -> [users].[updated_by]
+            // % Admin updating other Admins
             this.belongsTo(models.User, {
-                foreignKey: 'updated_by',
-                as: 'admin_updated_by_admin',
-                onDelete: 'RESTRICT',
+                foreignKey: "updated_by",
+                as: "updated_by_admin",
+                onDelete: "RESTRICT",
             });
 
-            // % Admin verifying Doctors
+            // % 1:M (hasMany) [users].[verified_by] -> [users].[user_id]
+            // % Admin verifying other Doctors
             this.hasMany(models.User, {
-                foreignKey: 'verified_by',
-                as: 'verified_by_admin',
-                onDelete: 'RESTRICT',
+                foreignKey: "verified_by",
+                as: "verified_by_admin",
+                onDelete: "RESTRICT",
             });
 
-            // % Admin changing consultation status
-            this.hasMany(models.Consultation, {
-                foreignKey: 'status_changed_by',
-                as: 'status_changed_by_admin',
-                onDelete: 'RESTRICT',
-            });
-
-            //* All Doctor Associations
-
-            // % Doctors changing consultation status
-            this.hasMany(models.Consultation, {
-                foreignKey: 'status_changed_by',
-                as: 'status_changed_by_doctor',
-                onDelete: 'RESTRICT',
-            });
-
-            //% Doctors verifying Doctors
+            // % 1:M (hasMany) [users].[verified_by] -> [users].[user_id]
+            // % Doctor verifying other Doctors
             this.hasMany(models.User, {
-                foreignKey: 'verified_by',
-                as: 'verified_by_doctor',
-                onDelete: 'RESTRICT',
+                foreignKey: "verified_by",
+                as: "verified_by_doctor",
+                onDelete: "RESTRICT",
             });
 
-            // >> Consultations Table: Created By / Updated By
-
-            // % 1:M (hasMany) [consultations].[created_by] -> [users].[user_id]
-            // % User type Patient creating Consultation
-            this.hasMany(models.Consultation, {
-                foreignKey: 'created_by',
-                as: 'created_by_patients',
-                onDelete: 'RESTRICT',
+            // % M:1 (belongsTo) [users].[user_id] -> [users].[created_by]
+            // % Patient adding self
+            this.belongsTo(models.User, {
+                foreignKey: "created_by",
+                as: "created_by_patient",
+                onDelete: "RESTRICT",
             });
 
-            // %1:M (hasMany) [consultations].[updated_by] -> [users].[user_id]
-            // % User type Patient updating Consultation
-            this.hasMany(models.Consultation, {
-                foreignKey: 'updated_by',
-                as: 'updated_by_doctor',
-                onDelete: 'RESTRICT',
+            // % M:1 (belongsTo) [users].[user_id] -> [users].[updated_by]
+            // % Patient updating self
+            this.belongsTo(models.User, {
+                foreignKey: "updated_by",
+                as: "updated_by_patient",
+                onDelete: "RESTRICT",
             });
+
+            //* >> Specializations Table: Created by / Updated By 
+
+            // % M:1 (belongsTo) [specializations].[specialty_id] -> [users].[created_by]
+            // % Admin adding Specializations
+            this.belongsTo(models.Specializations, {
+                foreignKey: "created_by",
+                as: "created_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [specializations].[specialty_id] -> [users].[updated_by]
+            // % Admin updating Specializations
+            this.belongsTo(models.Specializations, {
+                foreignKey: "updated_by",
+                as: "updated_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            //* >> Schedules Table: Created by / Updated By 
+
+            // % M:1 (belongsTo) [schedules].[sched_id] -> [users].[created_by]
+            // % Doctor adding Schedules
+            this.belongsTo(models.Schedules, {
+                foreignKey: "created_by",
+                as: "created_by_doctor",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [schedules].[sched_id] -> [users].[updated_by]
+            // % Doctor updating Schedules
+            this.belongsTo(models.Schedules, {
+                foreignKey: "updated_by",
+                as: "updated_by_doctor",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [schedules].[sched_id] -> [users].[updated_by]
+            // % Admin updating Schedules
+            this.belongsTo(models.Schedules, {
+                foreignKey: "updated_by",
+                as: "updated_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            //* >> Allergies Table: Created by / Updated By
+
+            // % M:1 (belongsTo) [patallergies].[allergy_id] -> [users].[created_by]
+            // % Patient adding Allergies
+            this.belongsTo(models.PatAllergies, {
+                foreignKey: "created_by",
+                as: "created_by_patient",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [patallergies].[allergy_id] -> [users].[updated_by]
+            // % Patient updating Allergies
+            this.belongsTo(models.PatAllergies, {
+                foreignKey: "updated_by",
+                as: "updated_by_patient",
+                onDelete: "RESTRICT",
+            });
+
+            //* >> Patient Family Medical History Table: Created by / Updated By
+
+            // % M:1 (belongsTo) [patfammedhist].[medhist_id] -> [users].[created_by]
+            // % Patient adding Family Medical History
+            this.belongsTo(models.PatFamMedHist, {
+                foreignKey: "created_by",
+                as: "created_by_patient",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [patfammedhist].[medhist_id] -> [users].[updated_by]
+            // % Patient updating Family Medical History
+            this.belongsTo(models.PatFamMedHist, {
+                foreignKey: "updated_by",
+                as: "updated_by_patient",
+                onDelete: "RESTRICT",
+            });
+
+            //* >> Consultations Table: Created by / Updated By
+
+            // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[created_by]
+            // % Patient creating Consultation
+            this.belongsTo(models.Consultations, {
+                foreignKey: "created_by",
+                as: "created_by_patient",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[updated_by]
+            // % Patient updating Consultation
+            this.belongsTo(models.Consultations, {
+                foreignKey: "updated_by",
+                as: "updated_by_patient",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[updated_by]
+            // % Doctor updating Consultation
+            this.belongsTo(models.Consultations, {
+                foreignKey: "updated_by",
+                as: "updated_by_doctor",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[updated_by]
+            // % Admin updating Consultation
+            this.belongsTo(models.Consultations, {
+                foreignKey: "updated_by",
+                as: "updated_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            //* >> Consultation Attachments Table: Created by / Updated By
+
+            // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[created_by]
+            // % Doctor adding Consultation Attachment
+            this.belongsTo(models.ConsultAttachments, {
+                foreignKey: "created_by",
+                as: "created_by_doctor",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[created_by]
+            // % Admin adding Consultation Attachment
+            this.belongsTo(models.ConsultAttachments, {
+                foreignKey: "created_by",
+                as: "created_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[updated_by]
+            // % Doctor updating Consultation Attachment
+            this.belongsTo(models.ConsultAttachments, {
+                foreignKey: "updated_by",
+                as: "updated_by_doctor",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[updated_by]
+            // % Admin updating Consultation Attachment
+            this.belongsTo(models.ConsultAttachments, {
+                foreignKey: "updated_by",
+                as: "updated_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            //* >> Payments Table: Created by / Updated By
+
+            // % M:1 (belongsTo) [payments].[pay_id] -> [users].[created_by]
+            // % Admin adding Payment
+            this.belongsTo(models.Payments, {
+                foreignKey: "created_by",
+                as: "created_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [payments].[pay_id] -> [users].[updated_by]
+            // % Admin updating Payment
+            this.belongsTo(models.Payments, {
+                foreignKey: "updated_by",
+                as: "updated_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [payments].[pay_id] -> [users].[created_by]
+            // % Doctor adding Payment
+            this.belongsTo(models.Payments, {
+                foreignKey: "created_by",
+                as: "created_by_doctor",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [payments].[pay_id] -> [users].[updated_by]
+            // % Doctor updating Payment
+            this.belongsTo(models.Payments, {
+                foreignKey: "updated_by",
+                as: "updated_by_doctor",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [payments].[pay_id] -> [users].[updated_by]
+            // % Patient updating Payment
+            this.belongsTo(models.Payments, {
+                foreignKey: "updated_by",
+                as: "updated_by_patient",
+                onDelete: "RESTRICT",
+            });
+
+            //* >> Payment Details Table: Created by / Updated By
+
+            // % M:1 (belongsTo) [paymentdetails].[detail_id] -> [users].[created_by]
+            // % Admin adding Payment Detail
+            this.belongsTo(models.PaymentsDet, {
+                foreignKey: "created_by",
+                as: "created_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            // % M:1 (belongsTo) [paymentdetails].[detail_id] -> [users].[updated_by]
+            // % Admin updating Payment Detail
+            this.belongsTo(models.PaymentsDet, {
+                foreignKey: "updated_by",
+                as: "updated_by_admin",
+                onDelete: "RESTRICT",
+            });
+
+            //* Patients Table: Foreign Keys
+
+            // % M:1 (belongsTo) [patients].[user_id] -> [users].[user_id]
+            // % User is Patient
+            this.belongsTo(models.Patients, {
+                foreignKey: "user_id",
+                as: "user_patient",
+                onDelete: "RESTRICT",
+            });
+
+            //* Doctors Table: Foreign Keys
+
+            // % M:1 (belongsTo) [doctors].[user_id] -> [users].[user_id]
+            // % User is Doctor
+            this.belongsTo(models.Doctors, {
+                foreignKey: "user_id",
+                as: "user_doctor",
+                onDelete: "RESTRICT",
+            });
+
         }
 
         toJSON() {
@@ -93,6 +314,28 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     User.init({
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                isEmail: { args: true, msg: '[users].[email] must be unique!' },
+                notNull: { msg: '[users].[email] cannot be null!' },
+                notEmpty: { msg: '[users].[email] cannot be blank or empty!' }
+            },
+            comment: 'User Email Address'
+        },
+
+        pass: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: { msg: '[users].[password] cannot be null!' },
+                notEmpty: { msg: '[users].[password] cannot be blank or empty!' }
+            },
+            comment: 'User Password'
+        },
+
         user_id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
@@ -101,41 +344,41 @@ module.exports = (sequelize, DataTypes) => {
             comment: 'UUID for the User table.'
         },
 
-        first_name: {
+        fname: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                notNull: { msg: '[users].[first_name] cannot be null!' },
-                notEmpty: { msg: '[users].[first_name] cannot be blank or empty!' }
+                notNull: { msg: '[users].[fname] cannot be null!' },
+                notEmpty: { msg: '[users].[fname] cannot be blank or empty!' }
             },
             comment: 'User\'s first name.'
         },
 
-        middle_name: {
+        mname: {
             type: DataTypes.STRING,
             allowNull: true,
             comment: 'User\'s middle name.'
         },
 
-        last_name: {
+        lname: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                notNull: { msg: '[users].[last_name] cannot be null' },
-                notEmpty: { msg: '[users].[last_name] cannot be blank or empty' }
+                notNull: { msg: '[users].[lname] cannot be null' },
+                notEmpty: { msg: '[users].[lname] cannot be blank or empty' }
             },
             comment: 'User\'s last name.'
         },
 
-        full_name: {
+        fullname: {
             type: DataTypes.STRING,
             set(value) {
                 if (this.middle_name === undefined) {
-                    this.setDataValue('full_name', `${this.first_name} ${this.last_name}`);
+                    this.setDataValue('fullname', `${this.fname} ${this.lname}`);
                 } else {
                     this.setDataValue(
-                        "full_name",
-                        `${this.first_name} ${this.middle_name.charAt(0).toUpperCase()}. ${this.last_name}`
+                        "fullname",
+                        `${this.fname} ${this.mname.charAt(0).toUpperCase()}. ${this.lname}`
                     );
                 }
             }
@@ -153,32 +396,17 @@ module.exports = (sequelize, DataTypes) => {
             comment: 'User\'s email address.'
         },
 
-        password: {
-            type: DataTypes.STRING,
+        dob: {
+            type: DataTypes.DATEONLY,
             allowNull: false,
             validate: {
-                notNull: { msg: '[users].[password] cannot be null' },
-                notEmpty: { msg: '[users].[password] cannot be blank or empty' },
+                notNull: { msg: '[users].[dob] cannot be null!' },
+                notEmpty: { msg: '[users].[dob] cannot be blank or empty!' }
             },
-            comment: 'This contains the encrypted password for authorization'
+            comment: 'User\'s date of birth.'
         },
 
-        user_type: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                notNull: { msg: '[users].[user_type] cannot be null' },
-                isIn: {
-                    args: [
-                        ['Admin', 'Librarian', 'Resident']
-                    ],
-                    msg: '[users].[user_type] value must be `Admin`, `Librarian` or `Resident` only'
-                }
-            },
-            comment: 'This contains the identification of a user.'
-        },
-
-        contact_number: {
+        cellnum: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
@@ -189,7 +417,17 @@ module.exports = (sequelize, DataTypes) => {
             comment: 'This contains the contact number of the user.'
         },
 
-        profile_pic: {
+        address: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: { msg: '[users].[address] cannot be null' },
+                notEmpty: { msg: '[users].[address] cannot be blank or empty' }
+            },
+            comment: 'This contains the address of the user.'
+        },
+
+        photo: {
             type: DataTypes.STRING,
             allowNull: true,
             comment: 'This contains the profile picture of the user.',
@@ -199,48 +437,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
 
-        verified: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: 0,
-            comment: 'This indicates if the account of a user is verified or not'
-        },
-
-        barangay_card: {
-            type: DataTypes.STRING,
-            allowNull: true,
-            comment: 'This contains the barangay card of the user.'
-        },
-
-        created_by: {
-            type: DataTypes.UUID,
-            allowNull: false,
-            validate: {
-                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
-            },
-            comment: 'This column is specifically for Admin and Librarian, that determines who created the user.'
-        },
-
-        updated_by: {
-            type: DataTypes.UUID,
-            allowNull: true,
-            validate: {
-                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
-            },
-            comment: 'This column is specifically for Admin and Librarian, that determines who updated the user.'
-
-        },
-
-        verified_by: {
-            type: DataTypes.UUID,
-            allowNull: true,
-            validate: {
-                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
-            },
-            comment: 'This column is specifically for Admin and Librarian, that determines who verified the Civilian in the API.'
-        },
-
-        status: {
+        user_status: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
@@ -252,7 +449,36 @@ module.exports = (sequelize, DataTypes) => {
                     msg: '[users].[status] value must be `Active` or `Inactive` only'
                 }
             },
+        },
+
+        created_by: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            validate: {
+                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
+            },
+            comment: 'This column is for Doctors, Patients, & Admin, that determines who created the user.'
+        },
+
+        updated_by: {
+            type: DataTypes.UUID,
+            allowNull: true,
+            validate: {
+                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
+            },
+            comment: 'This column is for Doctors, Patients, & Admin, that determines who updated the user.'
+
+        },
+
+        verified_by: {
+            type: DataTypes.UUID,
+            allowNull: true,
+            validate: {
+                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
+            },
+            comment: 'This column is specifically for Admin and Doctors, that determines who verified the Doctor in the API.'
         }
+
     }, {
         sequelize,
         modelName: 'User',
