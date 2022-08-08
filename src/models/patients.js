@@ -56,6 +56,15 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: 'RESTRICT',
             });
 
+            // % M:M (belongsTo) [patients].[user_id] -> [consultations].[pat_user_id]
+            // % Many patients can have many consultations
+            this.belongsToMany(models.Consultations, {
+                through: 'consultations',
+                as: 'consultations',
+                foreignKey: 'pat_user_id',
+                onDelete: 'RESTRICT',
+            });
+
         }
     }
     Patients.init({
@@ -63,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
         // bp_systolic, bp_diastolic, bloodtype, mens_period, pat_status, created_by, updated_by
         user_id: {
             type: DataTypes.UUID,
-            primartKey: true,
+            foreignKey: true,
             allowNull: false,
             validate: {
                 isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
@@ -175,8 +184,8 @@ module.exports = (sequelize, DataTypes) => {
                 isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
             },
             comment: 'This column is for Patients, that determines who updated the user.'
-
         }
+
     }, {
         sequelize,
         modelName: 'Patients',
