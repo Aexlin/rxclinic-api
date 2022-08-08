@@ -314,6 +314,30 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     User.init({
+        user_id: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            validate: {
+                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
+            },
+            comment: 'This column is for Doctors, Patients, & Admin, that determines user id.'
+        },
+
+        user_type: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: { msg: "[users].[user_type] cannot be null" },
+                isIn: {
+                    args: [
+                        ["Admin", "Doctor", "Patient"]
+                    ],
+                    msg: "[users].[user_type] value must be `Admin`, `Doctor` or `Patient` only",
+                },
+            },
+            comment: "This contains the identification of a user.",
+        },
+
         email: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -440,6 +464,7 @@ module.exports = (sequelize, DataTypes) => {
         user_status: {
             type: DataTypes.STRING,
             allowNull: false,
+            defaultValue: "Active",
             validate: {
                 notNull: { msg: '[users].[status] cannot be null' },
                 isIn: {
