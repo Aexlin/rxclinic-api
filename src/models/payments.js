@@ -28,49 +28,111 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: 'RESTRICT',
             });
 
-            //% 1:M (belongsTo) [patient].[patient_id] -> [payments].[payment_id]
+            //% 1:M (belongsTo) [patient].[user_id] -> [payments].[pay_id]
             //% One patient can have many payments
-            this.belongsTo(models.PatientPayments, {
-                foreignKey: 'payment_id',
-                as: 'patient_payments',
+            // this.hasMany(models.Patients, {
+            //     foreignKey: 'user_id',
+            //     as: 'patient',
+            //     onDelete: 'RESTRICT',
+            // });
+
+            // % 1:M (belongsTo) [patient].[patient_id] -> [payments].[pay_id]
+            // % One patient can update many payments
+            // this.hasMany(models.Patients, {
+            //     foreignKey: 'patient_id',
+            //     as: 'patient',
+            //     onDelete: 'RESTRICT',
+            // });
+
+            // % 1:1 (belongsTo) [consultations].[consult_id] -> [payments].[pay_id]
+            // % One consultation can have only one payment
+            this.belongsTo(models.Consultations, {
+                foreignKey: 'consult_id',
+                as: 'consultation',
                 onDelete: 'RESTRICT',
             });
 
-            // % 1:1 (belongsTo) [patient].[patient_id] -> [payments].[paymentdatetime]
-            // % One patient can have only one payment date time
-            this.hasMany(models.PaymentDateTime, {
-                foreignKey: 'patient_id',
-                as: 'payment_datetime',
-                onDelete: 'CASCADE',
-            });
+            // 1:M (belongsTo) [payments].[pay_id] -> [paymentsdet].[detail_id]
+            // One payment can have many payment details
+            // this.hasMany(models.PaymentsDet, {
+            //     foreignKey: 'pay_id',
+            //     as: 'payment_details',
+            //     onDelete: 'RESTRICT',
+            // });
 
-            // % 1:1 (belongsTo) [patient].[patient_id] -> [payments].[payment_amount]
-            // % One patient can have many payment amount
-            this.hasMany(models.PaymentAmount, {
-                foreignKey: 'patient_id',
-                as: 'payment_amount',
-                onDelete: 'CASCADE',
-            });
-
-            // % 1:1 (balongsTo) [patient].[patient_id] -> [payments].[payment_status]
-            // % One patient can have only one payment status
-            this.hasMany(models.PaymentStatus, {
-                foreignKey: 'patient_id',
-                as: 'payment_status',
-                onDelete: 'CASCADE',
-            });
-
-
-            
         }
     }
     Payments.init({
-        PaymentDateTime: DataTypes.STRING,
-        PaymentAmount: DataTypes.STRING,
-        PaymentStatus: DataTypes.STRING
+        //pay_id, pay_datetime, pay_amount, pay_status, created_by, updated_by, consult_id
+
+        pay_id: {
+            type: DataTypes.STRING,
+            primaryKey: true,
+            comment: 'Payment ID'
+        },
+
+        pay_datetime: {
+            // datatype is datetime
+            type: DataTypes.DATE,
+            allowNull: false,
+            comment: 'Payment Date and Time'
+        },
+
+        pay_amount: {
+            type: DataTypes.DECIMAL(10, 2),
+            allowNull: false,
+            comment: 'Payment Amount, total of all payment details'
+        },
+
+        pay_status: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            validate: {
+                allowNull: { msg: '[payments].[pay_status] cannot be null!' },
+                isIn: {
+                    args: [
+                        ['Pending', 'Paid', 'Cancelled']
+                    ],
+                    msg: '[payments].[pay_status] must be either `Pending`, `Paid`, or `Cancelled`!'
+                },
+            },
+            defaultValue: 'Pending',
+            comment: 'Patient payment status. Example values are: Pending, Paid, Cancelled...'
+        },
+
+        created_by: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            validate: {
+                isUUID: { args: 4, msg: '[payments].[created_by] value must be a UUIDV4 type' },
+            },
+            comment: 'This column is for Payments, created by Admin'
+        },
+
+        updated_by: {
+            type: DataTypes.UUID,
+            allowNull: true,
+            validate: {
+                isUUID: { args: 4, msg: '[payments].[updated_by] value must be a UUIDV4 type' },
+            },
+            comment: 'This column is for Payments, updated by Admin'
+        },
+
+        consult_id: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: { msg: '[payments].[consult_id] cannot be null!' },
+            },
+            comment: 'This column is for Payments to be linked to Consultations.'
+        },
+
     }, {
         sequelize,
         modelName: 'Payments',
+        timestamps: true,
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
     });
     return Payments;
 };

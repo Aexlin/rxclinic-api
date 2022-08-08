@@ -37,11 +37,11 @@ module.exports = (sequelize, DataTypes) => {
 
             // % M:1 (belongsTo) [users].[user_id] -> [users].[updated_by]
             // % Admin updating other Admins
-            this.belongsTo(models.User, {
-                foreignKey: "updated_by",
-                as: "updated_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // this.belongsTo(models.User, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
             // % 1:M (hasMany) [users].[verified_by] -> [users].[user_id]
             // % Admin verifying other Doctors
@@ -77,231 +77,231 @@ module.exports = (sequelize, DataTypes) => {
 
             //* >> Specializations Table: Created by / Updated By 
 
-            // % M:1 (belongsTo) [specializations].[specialty_id] -> [users].[created_by]
-            // % Admin adding Specializations
-            this.belongsTo(models.Specializations, {
-                foreignKey: "created_by",
-                as: "created_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [specializations].[specialty_id] -> [users].[created_by]
+            // // % Admin adding Specializations
+            // this.belongsTo(models.Specializations, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [specializations].[specialty_id] -> [users].[updated_by]
-            // % Admin updating Specializations
-            this.belongsTo(models.Specializations, {
-                foreignKey: "updated_by",
-                as: "updated_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [specializations].[specialty_id] -> [users].[updated_by]
+            // // % Admin updating Specializations
+            // this.belongsTo(models.Specializations, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
-            //* >> Schedules Table: Created by / Updated By 
+            // //* >> Schedules Table: Created by / Updated By 
 
-            // % M:1 (belongsTo) [schedules].[sched_id] -> [users].[created_by]
-            // % Doctor adding Schedules
-            this.belongsTo(models.Schedules, {
-                foreignKey: "created_by",
-                as: "created_by_doctor",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [schedules].[sched_id] -> [users].[created_by]
+            // // % Doctor adding Schedules
+            // this.belongsTo(models.Schedules, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_doctor",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [schedules].[sched_id] -> [users].[updated_by]
-            // % Doctor updating Schedules
-            this.belongsTo(models.Schedules, {
-                foreignKey: "updated_by",
-                as: "updated_by_doctor",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [schedules].[sched_id] -> [users].[updated_by]
+            // // % Doctor updating Schedules
+            // this.belongsTo(models.Schedules, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_doctor",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [schedules].[sched_id] -> [users].[updated_by]
-            // % Admin updating Schedules
-            this.belongsTo(models.Schedules, {
-                foreignKey: "updated_by",
-                as: "updated_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [schedules].[sched_id] -> [users].[updated_by]
+            // // % Admin updating Schedules
+            // this.belongsTo(models.Schedules, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
-            //* >> Allergies Table: Created by / Updated By
+            // //* >> Allergies Table: Created by / Updated By
 
-            // % M:1 (belongsTo) [patallergies].[allergy_id] -> [users].[created_by]
-            // % Patient adding Allergies
-            this.belongsTo(models.PatAllergies, {
-                foreignKey: "created_by",
-                as: "created_by_patient",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [patallergies].[allergy_id] -> [users].[created_by]
+            // // % Patient adding Allergies
+            // this.belongsTo(models.PatAllergies, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_patient",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [patallergies].[allergy_id] -> [users].[updated_by]
-            // % Patient updating Allergies
-            this.belongsTo(models.PatAllergies, {
-                foreignKey: "updated_by",
-                as: "updated_by_patient",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [patallergies].[allergy_id] -> [users].[updated_by]
+            // // % Patient updating Allergies
+            // this.belongsTo(models.PatAllergies, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_patient",
+            //     onDelete: "RESTRICT",
+            // });
 
-            //* >> Patient Family Medical History Table: Created by / Updated By
+            // //* >> Patient Family Medical History Table: Created by / Updated By
 
-            // % M:1 (belongsTo) [patfammedhist].[medhist_id] -> [users].[created_by]
-            // % Patient adding Family Medical History
-            this.belongsTo(models.PatFamMedHist, {
-                foreignKey: "created_by",
-                as: "created_by_patient",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [patfammedhist].[medhist_id] -> [users].[created_by]
+            // // % Patient adding Family Medical History
+            // this.belongsTo(models.PatFamMedHist, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_patient",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [patfammedhist].[medhist_id] -> [users].[updated_by]
-            // % Patient updating Family Medical History
-            this.belongsTo(models.PatFamMedHist, {
-                foreignKey: "updated_by",
-                as: "updated_by_patient",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [patfammedhist].[medhist_id] -> [users].[updated_by]
+            // // % Patient updating Family Medical History
+            // this.belongsTo(models.PatFamMedHist, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_patient",
+            //     onDelete: "RESTRICT",
+            // });
 
-            //* >> Consultations Table: Created by / Updated By
+            // //* >> Consultations Table: Created by / Updated By
 
-            // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[created_by]
-            // % Patient creating Consultation
-            this.belongsTo(models.Consultations, {
-                foreignKey: "created_by",
-                as: "created_by_patient",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[created_by]
+            // // % Patient creating Consultation
+            // this.belongsTo(models.Consultations, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_patient",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[updated_by]
-            // % Patient updating Consultation
-            this.belongsTo(models.Consultations, {
-                foreignKey: "updated_by",
-                as: "updated_by_patient",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[updated_by]
+            // // % Patient updating Consultation
+            // this.belongsTo(models.Consultations, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_patient",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[updated_by]
-            // % Doctor updating Consultation
-            this.belongsTo(models.Consultations, {
-                foreignKey: "updated_by",
-                as: "updated_by_doctor",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[updated_by]
+            // // % Doctor updating Consultation
+            // this.belongsTo(models.Consultations, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_doctor",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[updated_by]
-            // % Admin updating Consultation
-            this.belongsTo(models.Consultations, {
-                foreignKey: "updated_by",
-                as: "updated_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [consultations].[consult_id] -> [users].[updated_by]
+            // // % Admin updating Consultation
+            // this.belongsTo(models.Consultations, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
-            //* >> Consultation Attachments Table: Created by / Updated By
+            // //* >> Consultation Attachments Table: Created by / Updated By
 
-            // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[created_by]
-            // % Doctor adding Consultation Attachment
-            this.belongsTo(models.ConsultAttachments, {
-                foreignKey: "created_by",
-                as: "created_by_doctor",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[created_by]
+            // // % Doctor adding Consultation Attachment
+            // this.belongsTo(models.ConsultAttachments, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_doctor",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[created_by]
-            // % Admin adding Consultation Attachment
-            this.belongsTo(models.ConsultAttachments, {
-                foreignKey: "created_by",
-                as: "created_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[created_by]
+            // // % Admin adding Consultation Attachment
+            // this.belongsTo(models.ConsultAttachments, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[updated_by]
-            // % Doctor updating Consultation Attachment
-            this.belongsTo(models.ConsultAttachments, {
-                foreignKey: "updated_by",
-                as: "updated_by_doctor",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[updated_by]
+            // // % Doctor updating Consultation Attachment
+            // this.belongsTo(models.ConsultAttachments, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_doctor",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[updated_by]
-            // % Admin updating Consultation Attachment
-            this.belongsTo(models.ConsultAttachments, {
-                foreignKey: "updated_by",
-                as: "updated_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [consultattachments].[attach_id] -> [users].[updated_by]
+            // // % Admin updating Consultation Attachment
+            // this.belongsTo(models.ConsultAttachments, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
-            //* >> Payments Table: Created by / Updated By
+            // //* >> Payments Table: Created by / Updated By
 
-            // % M:1 (belongsTo) [payments].[pay_id] -> [users].[created_by]
-            // % Admin adding Payment
-            this.belongsTo(models.Payments, {
-                foreignKey: "created_by",
-                as: "created_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [payments].[pay_id] -> [users].[created_by]
+            // // % Admin adding Payment
+            // this.belongsTo(models.Payments, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [payments].[pay_id] -> [users].[updated_by]
-            // % Admin updating Payment
-            this.belongsTo(models.Payments, {
-                foreignKey: "updated_by",
-                as: "updated_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [payments].[pay_id] -> [users].[updated_by]
+            // // % Admin updating Payment
+            // this.belongsTo(models.Payments, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
-            // % M:1 (belongsTo) [payments].[pay_id] -> [users].[created_by]
-            // % Doctor adding Payment
-            this.belongsTo(models.Payments, {
-                foreignKey: "created_by",
-                as: "created_by_doctor",
-                onDelete: "RESTRICT",
-            });
+            // // % M:1 (belongsTo) [payments].[pay_id] -> [users].[created_by]
+            // // % Doctor adding Payment
+            // this.belongsTo(models.Payments, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_doctor",
+            //     onDelete: "RESTRICT",
+            // });
 
             // % M:1 (belongsTo) [payments].[pay_id] -> [users].[updated_by]
             // % Doctor updating Payment
-            this.belongsTo(models.Payments, {
-                foreignKey: "updated_by",
-                as: "updated_by_doctor",
-                onDelete: "RESTRICT",
-            });
+            // this.belongsTo(models.Payments, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_doctor",
+            //     onDelete: "RESTRICT",
+            // });
 
             // % M:1 (belongsTo) [payments].[pay_id] -> [users].[updated_by]
             // % Patient updating Payment
-            this.belongsTo(models.Payments, {
-                foreignKey: "updated_by",
-                as: "updated_by_patient",
-                onDelete: "RESTRICT",
-            });
+            // this.belongsTo(models.Payments, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_patient",
+            //     onDelete: "RESTRICT",
+            // });
 
             //* >> Payment Details Table: Created by / Updated By
 
             // % M:1 (belongsTo) [paymentdetails].[detail_id] -> [users].[created_by]
             // % Admin adding Payment Detail
-            this.belongsTo(models.PaymentsDet, {
-                foreignKey: "created_by",
-                as: "created_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // this.belongsTo(models.PaymentsDet, {
+            //     foreignKey: "created_by",
+            //     as: "created_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
             // % M:1 (belongsTo) [paymentdetails].[detail_id] -> [users].[updated_by]
             // % Admin updating Payment Detail
-            this.belongsTo(models.PaymentsDet, {
-                foreignKey: "updated_by",
-                as: "updated_by_admin",
-                onDelete: "RESTRICT",
-            });
+            // this.belongsTo(models.PaymentsDet, {
+            //     foreignKey: "updated_by",
+            //     as: "updated_by_admin",
+            //     onDelete: "RESTRICT",
+            // });
 
             //* Patients Table: Foreign Keys
 
             // % M:1 (belongsTo) [patients].[user_id] -> [users].[user_id]
             // % User is Patient
-            this.belongsTo(models.Patients, {
-                foreignKey: "user_id",
-                as: "user_patient",
-                onDelete: "RESTRICT",
-            });
+            // this.belongsTo(models.Patients, {
+            //     foreignKey: "user_id",
+            //     as: "user_patient",
+            //     onDelete: "RESTRICT",
+            // });
 
             //* Doctors Table: Foreign Keys
 
             // % M:1 (belongsTo) [doctors].[user_id] -> [users].[user_id]
             // % User is Doctor
-            this.belongsTo(models.Doctors, {
-                foreignKey: "user_id",
-                as: "user_doctor",
-                onDelete: "RESTRICT",
-            });
+            // this.belongsTo(models.Doctors, {
+            //     foreignKey: "user_id",
+            //     as: "user_doctor",
+            //     onDelete: "RESTRICT",
+            // });
 
         }
 
@@ -456,7 +456,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
             comment: 'This contains the profile picture of the user.',
             get() {
-                const rawValue = this.getDataValue('profile_pic');
+                const rawValue = this.getDataValue('photo');
                 return rawValue ? "http://localhost:3600/public/" + rawValue : null;
             }
         },

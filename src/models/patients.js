@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
             // % 1:1 (belongsTo) [patient].[created_by] -> [users].[user_id]
             // % Patient creates self
-            this.belongsTo(models.Users, {
+            this.belongsTo(models.User, {
                 foreignKey: 'created_by',
                 as: 'created_by_user',
                 onDelete: 'RESTRICT',
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 
             // % 1:1 (belongsTo) [patient].[updated_by] -> [users].[user_id]
             // % One patient can be updated by one user
-            this.belongsTo(models.Users, {
+            this.belongsTo(models.User, {
                 foreignKey: 'updated_by',
                 as: 'updated_by_user',
                 onDelete: 'RESTRICT',
@@ -56,14 +56,14 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: 'RESTRICT',
             });
 
-            // % M:M (belongsTo) [patients].[user_id] -> [consultations].[pat_user_id]
-            // % Many patients can have many consultations
-            this.belongsToMany(models.Consultations, {
-                through: 'consultations',
-                as: 'consultations',
-                foreignKey: 'pat_user_id',
-                onDelete: 'RESTRICT',
-            });
+            // // % M:M (belongsTo) [patients].[user_id] -> [consultations].[pat_user_id]
+            // // % Many patients can have many consultations
+            // this.belongsToMany(models.Consultations, {
+            //     through: 'consultations',
+            //     as: 'consultations',
+            //     foreignKey: 'pat_user_id',
+            //     onDelete: 'RESTRICT',
+            // });
 
         }
     }
@@ -172,7 +172,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             allowNull: false,
             validate: {
-                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
+                isUUID: { args: 4, msg: '[users].[created_by] value must be a UUIDV4 type' },
             },
             comment: 'This column is for Patients, that determines who created the user.'
         },

@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class PaymentsDetails extends Model {
+    class PaymentsDet extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,59 +10,96 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
 
-            //* Created, Updated by Admin / Patient
+            //* Created, Updated by Admin
 
-            // % M:1 (belongsTo) [payment].[created_by] -> [users].[user_id]
-            // % Many payment can be added by admin
+            // % M:1 (belongsTo) [paymentsdet].[created_by] -> [users].[user_id]
+            // % Many payment details can be created by admin
             this.belongsTo(models.User, {
                 foreignKey: 'created_by',
-                as: 'paymentid_created_by_admin',
+                as: 'payment_details_created_by_admin',
                 onDelete: 'RESTRICT',
             });
 
-            // % M:1 (belongsTo) [payment].[updated_by] -> [users].[user_id]
-            // % Many payment data can be updated by a single admin/doctor
+            // % M:1 (belongsTo) [paymentsdet].[updated_by] -> [users].[user_id]
+            // % Many payment details can be updated by admin
             this.belongsTo(models.User, {
                 foreignKey: 'updated_by',
-                as: 'doctor_updated_by_admin',
+                as: 'payment_details_updated_by_admin',
                 onDelete: 'RESTRICT',
             });
 
-            // % 1:1 (belongsTo) [patient].[patient_id] -> [payments].[detail_desc]
-            // % One patient can have only one detail desc
-            this.hasMany(models.DetailsDesc, {
-                foreignKey: 'patient_id',
-                as: 'detail_desc',
-                onDelete: 'CASCADE',
-            });
-
-            // % 1:1 (belongsTo) [patient].[patient_id] -> [payments].[pay_amount]
-            // % One patient can have many pay amount
-            this.hasMany(models.PaymentAmount, {
-                foreignKey: 'patient_id',
-                as: 'pay_amount',
-                onDelete: 'CASCADE',
-            });
-
-            // % 1:1 (balongsTo) [patient].[patient_id] -> [payments].[detail_status]
-            // % One patient can have only one details status
-            this.hasMany(models.DetailsStatus, {
-                foreignKey: 'patient_id',
-                as: 'details_status',
-                onDelete: 'CASCADE',
-            });
-
-
-            
         }
     }
-    PaymentsDetails.init({
-        DetailsDesc: DataTypes.STRING,
-        PayAmount: DataTypes.STRING,
-        DetailsStatus: DataTypes.STRING
+    PaymentsDet.init({
+        // detail_id, pay_id, detail_desc, detail_amount, detail_status, created_by, updated_by
+
+        detail_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+        },
+
+        pay_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'payments',
+                key: 'pay_id'
+            }
+        },
+
+        detail_desc: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            comment: "Payment Details Description"
+        },
+
+        pay_amount: {
+            type: DataTypes.DECIMAL(10, 2),
+            allowNull: false,
+            comment: 'Payment Amount'
+        },
+
+        detail_status: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            validate: {
+                allowNull: { msg: '[paymentsdet].[detail_status] cannot be null!' },
+                isIn: {
+                    args: [
+                        ['Active', 'Inactive']
+                    ],
+                    msg: '[paymentsdet].[detail_status] must be either `Active`, or `Inactive`!'
+                },
+            },
+            defaultValue: 'Active',
+            comment: 'Patient payment detail status. Example values are: Active, Inactive...'
+        },
+
+        created_by: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            validate: {
+                isUUID: { args: 4, msg: '[paymentsdet].[created_by] value must be a UUIDV4 type' },
+            },
+            comment: 'This column is for Payment Details, created by Admin'
+        },
+
+        updated_by: {
+            type: DataTypes.UUID,
+            allowNull: true,
+            validate: {
+                isUUID: { args: 4, msg: '[paymentsdet].[updated_by] value must be a UUIDV4 type' },
+            },
+            comment: 'This column is for Payment Details, updated by Admin'
+        },
+
     }, {
         sequelize,
-        modelName: 'Payments Details',
+        modelName: 'PaymentsDet',
+        timestamps: true,
+        createdAt: 'created_at',
+        updatedAt: 'updated_at',
     });
-    return Payments Details;
+    return PaymentsDet;
 };

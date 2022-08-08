@@ -28,14 +28,14 @@ module.exports = (sequelize, DataTypes) => {
 
             // % 1:1 (belongsTo) [medhis].[medhis_id] -> [patient].[medhis_id]
             // % One medhis is assigned to one patient.
-            this.belongsTo(models.patient, {
-                foreignKey: 'patient_id',
-                as: 'medhis_patient',
+            this.belongsTo(models.Patients, {
+                foreignKey: 'user_id',
+                as: 'patient',
                 onDelete: 'RESTRICT',
             });
         }
     }
-    patfammedhist.init({
+    PatFamMedHist.init({
         medhis_id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,

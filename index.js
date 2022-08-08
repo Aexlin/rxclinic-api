@@ -3,6 +3,7 @@
 //* import modules
 const express = require("express");
 const dotenv = require("dotenv");
+const db = require("./src/models");
 
 //* initialize app 
 var app = express();
@@ -18,6 +19,12 @@ app.use(
 
 //* get config from .env file
 dotenv.config();
+
+db.sequelize.authenticate().then(() => {
+    console.log("Connection has been established successfully.");
+}).catch(err => {
+    console.error("Unable to connect to the database:", err);
+});
 
 //* middleware
 app.use((req, res, next) => {

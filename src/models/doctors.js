@@ -248,12 +248,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                notNull: { msg: '[doctors].[vat_status] cannot be null!' },
+                notNull: { msg: '[doctors].[verification_status] cannot be null!' },
                 isIn: {
                     args: [
                         ['Verified', 'Unverified', 'Declined']
                     ],
-                    msg: '[doctors].[vat_status] must be either `Verified`, `Unverified` or `Declined`!'
+                    msg: '[doctors].[verification_status] must be either `Verified`, `Unverified` or `Declined`!'
                 },
             },
             defaultValue: 'Unverified',

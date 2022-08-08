@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
             });
         }
     }
-    patallergies.init({
+    PatAllergies.init({
         //user_id, allergy_id, allergy_name, allergy_status, created_by, updated_by
 
         user_id: {
@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
-                notNull: { msg: '[patallergies].[allergy_status] cannot be null!' },
+                allowNull: { msg: '[patallergies].[allergy_status] cannot be null!' },
                 isIn: {
                     args: [
                         ['Active', 'Inactive']
@@ -81,10 +81,20 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             allowNull: false,
             validate: {
-                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
+                isUUID: { args: 4, msg: '[patallergies].[created_by] value must be a UUIDV4 type' },
             },
             comment: 'This column is for Patients, that determines who created the allergy.'
         },
+
+        updated_by: {
+            type: DataTypes.UUID,
+            allowNull: true,
+            validate: {
+                isUUID: { args: 4, msg: '[patallergies].[updated_by] value must be a UUIDV4 type' },
+            },
+            comment: 'This column is for Patients, that determines who updated the allergy.'
+        },
+
 
 
     }, {
