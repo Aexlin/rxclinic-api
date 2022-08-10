@@ -26,6 +26,13 @@ db.sequelize.authenticate().then(() => {
     console.error("Unable to connect to the database:", err);
 });
 
+if (process.env.ALLOW_SYNC === "true") {
+    db.sequelize.sync({ alter: true }).then(() => {
+        console.log("Done adding/updating database based on the models.");
+    });
+}
+
+
 //* middleware
 app.use((req, res, next) => {
     //* you can check session here

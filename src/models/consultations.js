@@ -10,39 +10,41 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
 
-            //* Created, Updated by Admin / Doctor
+            //* Created, Updated by Patient
 
-            // % M:1 (belongsTo) [consultations].[created_by] -> [users].[user_id]
+            // % M:1 (belongsTo) [consultations].[created_by] -> [user].[user_id]
             // % Many consultations data can be created by a single admin/doctor
             this.belongsTo(models.User, {
                 foreignKey: 'created_by',
-                as: 'consultation_created_by_admin',
+                as: 'consultation_created_by_patient',
                 onDelete: 'RESTRICT',
+                onUpdate: 'CASCADE'
             });
 
-            // % M:1 (belongsTo) [consultations].[updated_by] -> [users].[user_id]
+            // % M:1 (belongsTo) [consultations].[updated_by] -> [user].[user_id]
             // % Many consultations data can be updated by a single admin/doctor
             this.belongsTo(models.User, {
                 foreignKey: 'updated_by',
                 as: 'consultation_updated_by_admin',
                 onDelete: 'RESTRICT',
+                onUpdate: 'CASCADE'
             });
 
-            // % M:1 (belongsTo) [consultations].[created_by] -> [users].[user_id]
-            // % Many consultations data can be created by a single admin/doctor
-            this.belongsTo(models.User, {
-                foreignKey: 'created_by',
-                as: 'consultation_created_by_doctor',
-                onDelete: 'RESTRICT',
-            });
+            // // % M:1 (belongsTo) [consultations].[created_by] -> [user].[user_id]
+            // // % Many consultations data can be created by a single admin/doctor
+            // this.belongsTo(models.User, {
+            //     foreignKey: 'created_by',
+            //     as: 'consultation_created_by_doctor',
+            //     onDelete: 'RESTRICT',
+            // });
 
-            // % M:1 (belongsTo) [consultations].[updated_by] -> [users].[user_id]
-            // % Many consultations data can be updated by a single admin/doctor
-            this.belongsTo(models.User, {
-                foreignKey: 'updated_by',
-                as: 'consultation_updated_by_doctor',
-                onDelete: 'RESTRICT',
-            });
+            // // % M:1 (belongsTo) [consultations].[updated_by] -> [user].[user_id]
+            // // % Many consultations data can be updated by a single admin/doctor
+            // this.belongsTo(models.User, {
+            //     foreignKey: 'updated_by',
+            //     as: 'consultation_updated_by_doctor',
+            //     onDelete: 'RESTRICT',
+            // });
 
             // //% M:M (hasMany) [consultations].[pat_user_id] -> [patients].[user_id]
             // //% Many consultations can be created by a single patient

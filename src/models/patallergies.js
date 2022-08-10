@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: true,
             allowNull: false,
             validate: {
-                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
+                isUUID: { args: 4, msg: '[patallergies].[user_id] value must be a UUIDV4 type' },
             },
             comment: 'This column is for Doctors, Patients, & Admin, that determines user id.'
         },
@@ -55,8 +55,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
-                notEmpty: { msg: '[allergies].[allergy_name] value cannot be empty' },
-                len: { args: [1, 50], msg: '[allergies].[allergy_name] value length must be between 1 and 50' },
+                notEmpty: { msg: '[patallergies].[allergy_name] value cannot be empty' },
+                len: { args: [1, 50], msg: '[patallergies].[allergy_name] value length must be between 1 and 50' },
             },
             comment: 'This column is for Patients, that determines allergy name.'
         },

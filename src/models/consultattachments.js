@@ -12,29 +12,58 @@ module.exports = (sequelize, DataTypes) => {
 
             //* Created, Updated by Admin / Doctor
 
-            // % M:1 (belongsTo) [consultattachments].[created_by] -> [users].[user_id]
-            // % Many consultattachments data can be created by an admin / doctor
+            // % M:M (hasMany) [consultations].[consult_id] -> [consultattachments].[attach_id]
+            // % Many consultations can have many attachments
+            this.hasMany(models.Consultations, {
+                foreignKey: 'consult_id',
+                as: 'consultation_attachments',
+                onDelete: 'RESTRICT',
+                // onUpdate: 'CASCADE'
+            });
+
+            // % M:1 (belongsTo) [consultattachments].[created_by] -> [user].[user_id]
+            // % Many consultattachments data can be created by a single admin/doctor
             this.belongsTo(models.User, {
                 foreignKey: 'created_by',
                 as: 'consultattachment_created_by_admin',
                 onDelete: 'RESTRICT',
+                // onUpdate: 'CASCADE'
             });
 
-            // % M:1 (belongsTo) [consultattachments].[updated_by] -> [users].[user_id]
-            // % Many consultattachments data can be updated by an admin / doctor
+            // % M:1 (belongsTo) [consultattachments].[updated_by] -> [user].[user_id]
+            // % Many consultattachments data can be updated by a single admin/doctor
             this.belongsTo(models.User, {
                 foreignKey: 'updated_by',
                 as: 'consultattachment_updated_by_admin',
                 onDelete: 'RESTRICT',
+                // onUpdate: 'CASCADE'
             });
 
-            // % M:1 (belongsTo) [consultattachments].[attach_id] -> [consultations].[consult_id]
-            // % Many consultattachments data can be created by a single consultation
-            this.belongsTo(models.Consultations, {
-                foreignKey: 'attach_id',
-                as: 'consultattachment_consultation',
-                onDelete: 'RESTRICT',
-            });
+            // this.belongsTo(models.Consultations, {
+            //     foreignKey: 'consult_id',
+            //     as: 'consultattachments_consultation',
+            //     onDelete: 'RESTRICT',
+            //     // onUpdate: 'CASCADE'
+            // });
+
+            // % M:1 (belongsTo) [consultattachments].[created_by] -> [users].[user_id]
+            // % Many consultattachments data can be created by an admin / doctor
+            // this.belongsTo(models.User, {
+            //     foreignKey: 'created_by',
+            //     as: 'consultattachments_created_by_user',
+            //     onDelete: 'RESTRICT',
+            //     // onUpdate: 'CASCADE'
+            // });
+
+            // // % M:1 (belongsTo) [consultattachments].[updated_by] -> [users].[user_id]
+            // // % Many consultattachments data can be updated by an admin / doctor
+            // this.belongsTo(models.User, {
+            //     foreignKey: 'updated_by',
+            //     as: 'consultattachments_updated_by_user',
+            //     onDelete: 'RESTRICT',
+            //     // onUpdate: 'CASCADE'
+            // });
+
 
         }
     }
@@ -44,7 +73,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             primaryKey: true,
-            autoIncrement: true,
         },
 
         consult_id: {
@@ -115,7 +143,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 isUUID: { args: 4, msg: '[consultattachments].[updated_by] value must be a UUIDV4 type' },
             },
-            comment: 'This column is for Consultations updated by Admin / Doctor'
+            comment: 'This column is for Consultation Attachments updated by Admin / Doctor'
         },
 
     }, {

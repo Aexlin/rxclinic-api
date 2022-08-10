@@ -13,6 +13,14 @@ module.exports = (sequelize, DataTypes) => {
 
             //* Created, Updated by Admin / Patient
 
+            // % M:1 (belongsTo) [patients].[updated_by] -> [user].[user_id]
+            // % Many patients data can be updated by a single admin/patient
+            this.belongsTo(models.User, {
+                foreignKey: 'updated_by',
+                as: 'patient_updated_by_admin_patient',
+                onDelete: 'RESTRICT',
+            });
+
             // % 1:1 (belongsTo) [patient].[created_by] -> [users].[user_id]
             // % Patient creates self
             this.belongsTo(models.User, {
@@ -20,15 +28,6 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'created_by_user',
                 onDelete: 'RESTRICT',
             });
-
-            // % 1:1 (belongsTo) [patient].[updated_by] -> [users].[user_id]
-            // % One patient can be updated by one user
-            this.belongsTo(models.User, {
-                foreignKey: 'updated_by',
-                as: 'updated_by_user',
-                onDelete: 'RESTRICT',
-            });
-
 
             // % 1:M (belongsTo) [patient].[updated_by] -> [users].[user_id]
             // % Many patient data can be updated by a single admin/doctor
@@ -49,9 +48,9 @@ module.exports = (sequelize, DataTypes) => {
 
             // % M:M (belongsTo) [patfammedhist].[user_id] -> [users].[user_id]
             // % Many patients can have many allergies
-            this.belongsToMany(models.PatFamMedHist, {
+            this.belongsTo(models.PatFamMedHist, {
                 through: 'patfammedhist',
-                as: 'medhist',
+                as: 'patient_medhist',
                 foreignKey: 'user_id',
                 onDelete: 'RESTRICT',
             });
@@ -70,12 +69,13 @@ module.exports = (sequelize, DataTypes) => {
     Patients.init({
         // user_id, sex, civil_status, weight_lbs, height_ft, heigh_in, bmi_num, bmi_status, temp_celsius
         // bp_systolic, bp_diastolic, bloodtype, mens_period, pat_status, created_by, updated_by
+
         user_id: {
             type: DataTypes.UUID,
             foreignKey: true,
             allowNull: false,
             validate: {
-                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
+                isUUID: { args: 4, msg: '[patients].[user_id] value must be a UUIDV4 type' },
             },
             comment: 'This column is for Doctors, Patients, & Admin, that determines user id.'
         },
@@ -172,7 +172,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             allowNull: false,
             validate: {
-                isUUID: { args: 4, msg: '[users].[created_by] value must be a UUIDV4 type' },
+                isUUID: { args: 4, msg: '[patients].[created_by] value must be a UUIDV4 type' },
             },
             comment: 'This column is for Patients, that determines who created the user.'
         },
@@ -181,7 +181,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.UUID,
             allowNull: true,
             validate: {
-                isUUID: { args: 4, msg: '[users].[updated_by] value must be a UUIDV4 type' },
+                isUUID: { args: 4, msg: '[patients].[updated_by] value must be a UUIDV4 type' },
             },
             comment: 'This column is for Patients, that determines who updated the user.'
         }
